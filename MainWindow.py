@@ -7,17 +7,18 @@ import tkinter.messagebox
 import SettingWindow
 import RegisterWindow
 
-class Main_GUI:
-    def __init__(self,root):
-        root.title("TinyImage")
-        root.geometry("250x80")
+class Main_GUI(Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("TinyImage")
+        self.geometry("250x80")
 
-        menubar = Menu(root)
+        menubar = Menu(self)
         menubar.add_command(label="Settings",command=self.setting_GUI)
         menubar.add_command(label="Register",command=self.register_GUI)
-        root.config(menu=menubar)
+        self.config(menu=menubar)
 
-        main = Frame(root)
+        main = Frame(self)
         main.pack()
         self.cont = StringVar()
         self.cont.set('Unknown')
@@ -47,7 +48,11 @@ class Main_GUI:
             tkinter.messagebox.showinfo("Success", "File location: %s"% filename)
 
     def setting_GUI(self):
-        SettingWindow.Setting_GUI()
+        setting = SettingWindow.Setting_GUI(self)
+        # self.wait_window(setting)
 
     def register_GUI(self):
         RegisterWindow.Register_GUI()
+
+    def updatecont(self):
+        self.cont.set(str(tinify.compression_count))

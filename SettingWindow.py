@@ -3,25 +3,28 @@ import tkinter.messagebox
 import apikey
 import tinify
 
-class Setting_GUI:
-    def __init__(self):
+class Setting_GUI(Toplevel):
+    def __init__(self,parent):
+        super().__init__()
+        self.parent = parent
         key = "Input your key here"
-        load = Toplevel()
-        load.wm_title("Settings - TingImage")
-        load.wm_attributes("-topmost", 1)
+        self.keystringvar = StringVar()
 
-        welcome = Label(load, text="Settings")
+        self.wm_title("Settings - TingImage")
+        self.wm_attributes("-topmost", 1)
+
+        title = Label(self, text="Settings")
         try:
             key = apikey.loadkey()
             statustext = "continue with this key"
         except Exception as e:
             statustext = e
-        statuslabel = Label(load, text=statustext)
-        self.keystringvar = StringVar()
+        statuslabel = Label(self, text=statustext)
         self.keystringvar.set(key)
-        keytext = Entry(load, textvariable=self.keystringvar, width=40)
-        continuebutton = Button(load, text="Continue",command=self.loadkey, width=12)
-        welcome.grid(row=0, sticky=W + E + N + S)
+        keytext = Entry(self, textvariable=self.keystringvar, width=40)
+        continuebutton = Button(self, text="Continue",command=self.loadkey, width=12)
+
+        title.grid(row=0, sticky=W + E + N + S)
         statuslabel.grid(row=1, sticky=W + E + N + S)
         keytext.grid(row=2, sticky=W + E + N + S)
         continuebutton.grid(row=3,padx=5,pady=5)
@@ -34,4 +37,5 @@ class Setting_GUI:
             tkinter.messagebox.showerror("Error", e)
         else:
             tkinter.messagebox.showinfo("Success", "Update API-Key successful!")
-            self.cont.set(str(tinify.compression_count))
+            self.parent.cont.set(str(tinify.compression_count))
+            self.destroy()
